@@ -5,6 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 #include "Window.h"
 
+#include <QDesktopServices>
+#include <QDir>
 #include <QKeyEvent>
 #include <QKeySequence>
 #include <QMenuBar>
@@ -12,6 +14,7 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QScreen>
+#include <QUrl>
 #include <QWindow>
 
 #ifdef Q_OS_WIN
@@ -61,6 +64,7 @@
 #include "PrinterView.h"
 #include "ReportView.h"
 #include "ROMInfo.h"
+#include "SaveBackup.h"
 #include "SaveConverter.h"
 #ifdef ENABLE_SCRIPTING
 #include "scripting/ScriptingView.h"
@@ -1344,6 +1348,11 @@ void Window::setupMenu(QMenuBar* menubar) {
 	m_actions.addSeparator("saves");
 
 	m_actions.addAction(tr("Convert save game..."), "convertSave", openTView<SaveConverter>(), "saves");
+	addGameAction(tr("セーブのバックアップを開く"), "openSaveBackups", [this]() {
+		QString dir = SaveBackup::backupDir(m_controller.get());
+		QDir().mkpath(dir);
+		QDesktopServices::openUrl(QUrl::fromLocalFile(dir));
+	}, "saves");
 
 #ifdef M_CORE_GBA
 	auto importShark = addGameAction(tr("Import GameShark Save..."), "importShark", this, &Window::importSharkport, "saves");
@@ -2249,6 +2258,7 @@ void Window::setController(CoreController* controller, const QString& fname) {
 #ifdef _WIN32
 	CelioNetView::hookController(m_controller);
 #endif
+	SaveBackup::hookController(m_controller);
 
 #ifdef M_CORE_GBA
 	if (m_controller->platform() == mPLATFORM_GBA) {

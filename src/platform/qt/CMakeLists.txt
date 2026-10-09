@@ -160,6 +160,7 @@ set(SOURCE_FILES
 	ReportView.cpp
 	ROMInfo.cpp
 	RotatedHeaderView.cpp
+	SaveBackup.cpp
 	SaveConverter.cpp
 	SavestateButton.cpp
 	SensorView.cpp
