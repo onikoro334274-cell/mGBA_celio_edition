@@ -18,8 +18,11 @@
 >   DMA, video, audio, timers and serial keep their real timing, so games only lag less. Set `overclock=1` for real speed.
 > - 16MiB of extra RAM at `0x01000000`-`0x01FFFFFF` (unused on real hardware): zero wait states, code can run from it,
 >   DMA can read it, and save states keep it. The BIOS CpuSet/CpuFastSet refuse it as a source, as on real hardware.
+> - Qt: automatic save backups. Each time the game finishes writing its save, a copy goes to `backups/<ROM name>/<date-time>.sav`
+>   next to the ROM (at most one per 5 minutes, newest 30 kept, identical saves skipped). File > Save games > セーブのバックアップを開く
+>   opens the folder. Config `saveBackup=0` turns it off.
 > - LTO is off by default (`BUILD_LTO`): with it, the Lua bindings break on this branch.
-> - Games that use the second half of a 64MiB ROM, flash banks 2-15 or the extra RAM only work on this build;
+> - Games that use the second half of a 64MiB ROM, flash banks 2-95 or the extra RAM only work on this build;
 >   other emulators and real hardware cannot use them.
 >
 > See [readme.txt](readme.txt) (Japanese) for usage notes. License: MPL-2.0, same as mGBA.
